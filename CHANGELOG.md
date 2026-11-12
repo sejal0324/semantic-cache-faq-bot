@@ -11,3 +11,4 @@
 - feat(cache): SemanticCache with FAISS/numpy stores, best-first candidates, per-category TTL, per-tenant LRU
 - security: link allowlist before write-back (cache poisoning), tenant cap (memory DoS)
 - feat(bot): FAQBot request flow (embed off-loop, lookup, LLM on miss, guarded write-back), metrics, typed JSONL loaders
+- data: 30 hand-written e-commerce FAQs and a 100-question labelled test set (60 paraphrases, 45% Hinglish; 40 negations, near misses, out-of-scope), with integrity tests

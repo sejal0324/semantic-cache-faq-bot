@@ -1,0 +1,100 @@
+{"id": "t001", "text": "Where can I see the status of my parcel?", "expected_faq_id": "f01", "lang": "en", "kind": "paraphrase"}
+{"id": "t002", "text": "mera order kahan tak pahuncha, track kaise karu?", "expected_faq_id": "f01", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t003", "text": "How many days will it take for my order to arrive?", "expected_faq_id": "f02", "lang": "en", "kind": "paraphrase"}
+{"id": "t004", "text": "delivery kitne din mein hoti hai?", "expected_faq_id": "f02", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t005", "text": "Is delivery available on Sunday?", "expected_faq_id": "f03", "lang": "en", "kind": "paraphrase"}
+{"id": "t006", "text": "sunday ko delivery hoti hai kya?", "expected_faq_id": "f03", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t007", "text": "How much do you charge for shipping?", "expected_faq_id": "f04", "lang": "en", "kind": "paraphrase"}
+{"id": "t008", "text": "delivery charge kitna lagta hai?", "expected_faq_id": "f04", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t009", "text": "Can I pay cash when the order is delivered?", "expected_faq_id": "f05", "lang": "en", "kind": "paraphrase"}
+{"id": "t010", "text": "COD available hai kya?", "expected_faq_id": "f05", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t011", "text": "Do you charge extra for COD orders?", "expected_faq_id": "f06", "lang": "en", "kind": "paraphrase"}
+{"id": "t012", "text": "cash on delivery pe extra paisa lagta hai kya?", "expected_faq_id": "f06", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t013", "text": "What is the process to cancel an order?", "expected_faq_id": "f07", "lang": "en", "kind": "paraphrase"}
+{"id": "t014", "text": "order cancel kaise kare?", "expected_faq_id": "f07", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t015", "text": "I placed an order, can I update the shipping address now?", "expected_faq_id": "f08", "lang": "en", "kind": "paraphrase"}
+{"id": "t016", "text": "order ke baad address change kar sakte hai kya?", "expected_faq_id": "f08", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t017", "text": "What are the rules for returning items?", "expected_faq_id": "f09", "lang": "en", "kind": "paraphrase"}
+{"id": "t018", "text": "return policy kya hai aapki?", "expected_faq_id": "f09", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t019", "text": "What are the steps to send back an item I bought?", "expected_faq_id": "f10", "lang": "en", "kind": "paraphrase"}
+{"id": "t020", "text": "product return kaise karu?", "expected_faq_id": "f10", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t021", "text": "How long until my refund arrives?", "expected_faq_id": "f11", "lang": "en", "kind": "paraphrase"}
+{"id": "t022", "text": "refund kab milega?", "expected_faq_id": "f11", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t023", "text": "Where does the refund money go?", "expected_faq_id": "f12", "lang": "en", "kind": "paraphrase"}
+{"id": "t024", "text": "refund kis account mein aayega?", "expected_faq_id": "f12", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t025", "text": "Can I swap my shoes for a bigger size?", "expected_faq_id": "f13", "lang": "en", "kind": "paraphrase"}
+{"id": "t026", "text": "size exchange ho sakta hai kya?", "expected_faq_id": "f13", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t027", "text": "Which ways can I pay on your site?", "expected_faq_id": "f14", "lang": "en", "kind": "paraphrase"}
+{"id": "t028", "text": "payment kaise kar sakte hai, kaun kaun se options hai?", "expected_faq_id": "f14", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t029", "text": "Is saving my credit card on the app secure?", "expected_faq_id": "f15", "lang": "en", "kind": "paraphrase"}
+{"id": "t030", "text": "card save karna safe hai kya?", "expected_faq_id": "f15", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t031", "text": "The payment failed but my account was debited, what now?", "expected_faq_id": "f16", "lang": "en", "kind": "paraphrase"}
+{"id": "t032", "text": "payment fail ho gaya par paise kat gaye, kya karu?", "expected_faq_id": "f16", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t033", "text": "Where do I enter a promo code?", "expected_faq_id": "f17", "lang": "en", "kind": "paraphrase"}
+{"id": "t034", "text": "coupon code kaise lagaye?", "expected_faq_id": "f17", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t035", "text": "My discount code isn't applying, why?", "expected_faq_id": "f18", "lang": "en", "kind": "paraphrase"}
+{"id": "t036", "text": "coupon apply nahi ho raha, kyun?", "expected_faq_id": "f18", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t037", "text": "What is the price of the Plus subscription?", "expected_faq_id": "f19", "lang": "en", "kind": "paraphrase"}
+{"id": "t038", "text": "Plus membership kitne ka hai?", "expected_faq_id": "f19", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t039", "text": "What do I get with a Plus membership?", "expected_faq_id": "f20", "lang": "en", "kind": "paraphrase"}
+{"id": "t040", "text": "Plus lene ke kya fayde hai?", "expected_faq_id": "f20", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t041", "text": "Can I pay in monthly installments?", "expected_faq_id": "f21", "lang": "en", "kind": "paraphrase"}
+{"id": "t042", "text": "EMI milta hai kya?", "expected_faq_id": "f21", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t043", "text": "I forgot my password, how do I get back into my account?", "expected_faq_id": "f22", "lang": "en", "kind": "paraphrase"}
+{"id": "t044", "text": "password bhool gaya, reset kaise kare?", "expected_faq_id": "f22", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t045", "text": "I want to close my BazaarNow account permanently.", "expected_faq_id": "f23", "lang": "en", "kind": "paraphrase"}
+{"id": "t046", "text": "account delete kaise karte hai?", "expected_faq_id": "f23", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t047", "text": "What is the customer support number?", "expected_faq_id": "f24", "lang": "en", "kind": "paraphrase"}
+{"id": "t048", "text": "customer care se baat kaise karu?", "expected_faq_id": "f24", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t049", "text": "Can you deliver outside India?", "expected_faq_id": "f25", "lang": "en", "kind": "paraphrase"}
+{"id": "t050", "text": "How can I pay using my wallet balance?", "expected_faq_id": "f30", "lang": "en", "kind": "paraphrase"}
+{"id": "t051", "text": "Do electronic items come with a warranty?", "expected_faq_id": "f26", "lang": "en", "kind": "paraphrase"}
+{"id": "t052", "text": "What warranty does a laptop bought here have?", "expected_faq_id": "f26", "lang": "en", "kind": "paraphrase"}
+{"id": "t053", "text": "How can I download a GST bill for a purchase?", "expected_faq_id": "f27", "lang": "en", "kind": "paraphrase"}
+{"id": "t054", "text": "I need a tax invoice with my GSTIN, is that possible?", "expected_faq_id": "f27", "lang": "en", "kind": "paraphrase"}
+{"id": "t055", "text": "The item I got is broken, what should I do?", "expected_faq_id": "f28", "lang": "en", "kind": "paraphrase"}
+{"id": "t056", "text": "My product arrived damaged, how do I report it?", "expected_faq_id": "f28", "lang": "en", "kind": "paraphrase"}
+{"id": "t057", "text": "Can I schedule delivery for a specific day?", "expected_faq_id": "f29", "lang": "en", "kind": "paraphrase"}
+{"id": "t058", "text": "delivery ki date choose kar sakte hai kya?", "expected_faq_id": "f29", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t059", "text": "refund kab tak aayega bata na", "expected_faq_id": "f11", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t060", "text": "track kaise karu order ko, bata na", "expected_faq_id": "f01", "lang": "hinglish", "kind": "paraphrase"}
+{"id": "t061", "text": "refund nahi mila abhi tak, complaint kaise karu?", "expected_faq_id": "none", "lang": "hinglish", "kind": "negation"}
+{"id": "t062", "text": "Why is Cash on Delivery not available for my pincode?", "expected_faq_id": "none", "lang": "en", "kind": "negation"}
+{"id": "t063", "text": "order cancel nahi ho raha, kya karu?", "expected_faq_id": "none", "lang": "hinglish", "kind": "negation"}
+{"id": "t064", "text": "Why can't I return this product?", "expected_faq_id": "none", "lang": "en", "kind": "negation"}
+{"id": "t065", "text": "I don't want Plus membership anymore, how do I stop it?", "expected_faq_id": "none", "lang": "en", "kind": "negation"}
+{"id": "t066", "text": "password reset ka OTP nahi aa raha", "expected_faq_id": "none", "lang": "hinglish", "kind": "negation"}
+{"id": "t067", "text": "I never received my order but it shows delivered", "expected_faq_id": "none", "lang": "en", "kind": "negation"}
+{"id": "t068", "text": "account delete nahi karna, sirf deactivate karna hai", "expected_faq_id": "none", "lang": "hinglish", "kind": "negation"}
+{"id": "t069", "text": "Why is there no tracking update on my order for 5 days?", "expected_faq_id": "none", "lang": "en", "kind": "negation"}
+{"id": "t070", "text": "Can I return a product without the original box?", "expected_faq_id": "none", "lang": "en", "kind": "negation"}
+{"id": "t071", "text": "How do I cancel my Plus membership?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t072", "text": "Can I change the payment method after placing the order?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t073", "text": "How do I apply for a job at BazaarNow?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t074", "text": "How do I contact a seller directly?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t075", "text": "What is the warranty on furniture?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t076", "text": "How do I track a parcel I am sending to someone?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t077", "text": "wallet mein paise kaise add kare?", "expected_faq_id": "none", "lang": "hinglish", "kind": "near_miss"}
+{"id": "t078", "text": "How do I change my registered mobile number?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t079", "text": "Can I get a refund on my Plus membership fee?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t080", "text": "Do you deliver groceries on Sundays?", "expected_faq_id": "none", "lang": "en", "kind": "near_miss"}
+{"id": "t081", "text": "Do you sell gift cards?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t082", "text": "Can I pre-order a phone before it launches?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t083", "text": "Do you have a physical store in Pune?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t084", "text": "Can I become a seller on BazaarNow?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t085", "text": "Do you offer student discounts?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t086", "text": "Is there a referral program?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t087", "text": "Can I gift wrap my order?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t088", "text": "How do I write a product review?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t089", "text": "kya aap furniture assemble karke dete ho?", "expected_faq_id": "none", "lang": "hinglish", "kind": "out_of_scope"}
+{"id": "t090", "text": "BazaarNow mein job openings hai kya?", "expected_faq_id": "none", "lang": "hinglish", "kind": "out_of_scope"}
+{"id": "t091", "text": "Does BazaarNow have an Android app?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t092", "text": "Can I order without creating an account?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t093", "text": "Is there a price match guarantee?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t094", "text": "Do you sell refurbished laptops?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t095", "text": "Can I pick up my order from a store?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t096", "text": "aaj ka best deal kya hai?", "expected_faq_id": "none", "lang": "hinglish", "kind": "out_of_scope"}
+{"id": "t097", "text": "Do you accept PayPal?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t098", "text": "What are your Diwali sale dates?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
+{"id": "t099", "text": "kya main bulk order kar sakta hoon office ke liye?", "expected_faq_id": "none", "lang": "hinglish", "kind": "out_of_scope"}
+{"id": "t100", "text": "How do I report a fake product listing?", "expected_faq_id": "none", "lang": "en", "kind": "out_of_scope"}
