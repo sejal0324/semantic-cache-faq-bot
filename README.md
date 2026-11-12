@@ -91,6 +91,14 @@ Not yet run with real models: run `make experiments`. This block, the headline a
 `reports/results.json` are written by `scripts/run_experiments.py`; nothing here is typed by hand.
 <!-- RESULTS:END -->
 
+## Eval gate (CI)
+
+`eval_gate.json` holds thresholds on measured numbers; `make gate` checks them and CI runs it on
+every push, so a change that makes the system measurably worse **fails the build**, like a
+failing unit test. `smoke` rules run in CI on the deterministic outputs; `real` rules
+(`make gate-real`) check your real-model results. After your first real run, tighten the
+`real` thresholds to the numbers you got, so any later change has to keep them.
+
 ## Design decisions and trade-offs
 
 - **Semantic over exact-match caching.** Exact match misses "refund kab milega?" vs "When will

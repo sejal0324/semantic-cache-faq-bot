@@ -22,3 +22,5 @@ jobs:
       - run: make test
       # fake backends only: proves the pipeline runs end to end without network or keys
       - run: make smoke
+      # eval gate: fail the build if measured numbers regress
+      - run: make gate

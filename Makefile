@@ -1,6 +1,6 @@
 PY ?= python
 
-.PHONY: install install-models test lint format typecheck smoke experiments demo serve loadtest check
+.PHONY: gate gate-real install install-models test lint format typecheck smoke experiments demo serve loadtest check
 
 install:
 	$(PY) -m pip install -e ".[dev]"
@@ -40,3 +40,10 @@ serve:
 
 loadtest:
 	$(PY) loadtest/run_load.py
+
+# Eval gates: fail if measured numbers regress (eval_gate.json)
+gate:
+	$(PY) scripts/eval_gate.py --mode smoke
+
+gate-real:
+	$(PY) scripts/eval_gate.py --mode real

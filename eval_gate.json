@@ -1,0 +1,14 @@
+{
+  "smoke": [
+    {"file": "reports/smoke/results.json", "path": "baseline_llm_calls", "op": "==", "value": 100, "why": "every test question measured once without the cache"},
+    {"file": "reports/smoke/results.json", "path": "chosen.false_hits", "op": "<=", "value": 1, "why": "threshold picker must respect the false-hit budget"},
+    {"file": "reports/smoke/results.json", "path": "chosen.llm_calls", "op": "<=", "value": "$baseline_llm_calls", "why": "the cache never adds LLM calls"},
+    {"file": "reports/smoke/results.json", "path": "cost_per_1k_after", "op": "<=", "value": "$cost_per_1k_before", "why": "the cache never adds cost"}
+  ],
+  "real": [
+    {"file": "reports/results.json", "path": "chosen.false_hits", "op": "<=", "value": 1, "why": "at most one wrong cached answer on 100 questions"},
+    {"file": "reports/results.json", "path": "chosen.hit_rate", "op": ">=", "value": 0.5, "why": "recall on repeat questions; raise this after your first real run"},
+    {"file": "reports/results.json", "path": "chosen.avg_e2e_ms", "op": "<", "value": "$baseline_avg_ms", "why": "the cache must make answers faster on average"},
+    {"file": "reports/results.json", "path": "guard_off_false_hits", "op": ">=", "value": "$chosen.false_hits", "why": "the negation guard must not add false hits"}
+  ]
+}

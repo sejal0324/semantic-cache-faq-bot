@@ -1,6 +1,6 @@
 {
   "mode": "smoke",
-  "created_at": "2026-11-12 16:13 UTC",
+  "created_at": "2026-11-12 17:38 UTC",
   "machine": "Linux x86_64, 2 CPUs, Python 3.13.18",
   "llm_model": "fake-llm",
   "models": [
@@ -17,9 +17,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.04,
       "precision": 0.0,
-      "avg_lookup_ms": 0.07268254000905472,
-      "avg_e2e_ms": 137.7572199000019,
-      "p95_e2e_ms": 239.80293404996473,
+      "avg_lookup_ms": 0.10360350000269136,
+      "avg_e2e_ms": 137.85820021000632,
+      "p95_e2e_ms": 240.22534085002576,
       "llm_calls": 96
     },
     {
@@ -32,9 +32,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.01,
       "precision": 0.0,
-      "avg_lookup_ms": 0.06776285000341886,
-      "avg_e2e_ms": 143.50130949999652,
-      "p95_e2e_ms": 239.80479310000078,
+      "avg_lookup_ms": 0.0924581599974772,
+      "avg_e2e_ms": 143.5983720500019,
+      "p95_e2e_ms": 240.22423589999562,
       "llm_calls": 99
     },
     {
@@ -47,9 +47,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.01,
       "precision": 0.0,
-      "avg_lookup_ms": 0.06523848000142607,
-      "avg_e2e_ms": 143.49878512999453,
-      "p95_e2e_ms": 239.80335789994456,
+      "avg_lookup_ms": 0.09450774000242745,
+      "avg_e2e_ms": 143.60042163000685,
+      "p95_e2e_ms": 240.22793125000703,
       "llm_calls": 99
     },
     {
@@ -62,9 +62,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.0,
       "precision": 1.0,
-      "avg_lookup_ms": 0.06504323000513068,
-      "avg_e2e_ms": 144.9301806999972,
-      "p95_e2e_ms": 239.80327169994098,
+      "avg_lookup_ms": 0.08942330000309084,
+      "avg_e2e_ms": 145.02940358000728,
+      "p95_e2e_ms": 240.22432929993442,
       "llm_calls": 100
     },
     {
@@ -77,9 +77,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.0,
       "precision": 1.0,
-      "avg_lookup_ms": 0.06498913000314133,
-      "avg_e2e_ms": 144.93012659999522,
-      "p95_e2e_ms": 239.8030534999691,
+      "avg_lookup_ms": 0.0959848800096097,
+      "avg_e2e_ms": 145.0359651600138,
+      "p95_e2e_ms": 240.23090245003687,
       "llm_calls": 100
     },
     {
@@ -92,9 +92,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.04,
       "precision": 0.0,
-      "avg_lookup_ms": 0.0732605400094144,
-      "avg_e2e_ms": 137.7577979000023,
-      "p95_e2e_ms": 239.80291754998007,
+      "avg_lookup_ms": 0.09175341000286608,
+      "avg_e2e_ms": 137.8463501200065,
+      "p95_e2e_ms": 240.22393385008058,
       "llm_calls": 96
     },
     {
@@ -107,9 +107,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.01,
       "precision": 0.0,
-      "avg_lookup_ms": 0.12652090000187854,
-      "avg_e2e_ms": 143.56006754999495,
-      "p95_e2e_ms": 239.80321449998314,
+      "avg_lookup_ms": 0.09368430999643351,
+      "avg_e2e_ms": 143.59959820000088,
+      "p95_e2e_ms": 240.22652329996959,
       "llm_calls": 99
     },
     {
@@ -122,9 +122,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.01,
       "precision": 0.0,
-      "avg_lookup_ms": 0.06499449000443747,
-      "avg_e2e_ms": 143.49854113999757,
-      "p95_e2e_ms": 239.80315809997705,
+      "avg_lookup_ms": 0.10154846999625988,
+      "avg_e2e_ms": 143.60746236000068,
+      "p95_e2e_ms": 240.30579335011453,
       "llm_calls": 99
     },
     {
@@ -137,9 +137,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.0,
       "precision": 1.0,
-      "avg_lookup_ms": 0.06472264000535688,
-      "avg_e2e_ms": 144.92986010999743,
-      "p95_e2e_ms": 239.8027076999881,
+      "avg_lookup_ms": 0.08990084000743082,
+      "avg_e2e_ms": 145.02988112001162,
+      "p95_e2e_ms": 240.22392295001396,
       "llm_calls": 100
     },
     {
@@ -152,9 +152,9 @@
       "hit_rate": 0.0,
       "overall_hit_rate": 0.0,
       "precision": 1.0,
-      "avg_lookup_ms": 0.06421892000503249,
-      "avg_e2e_ms": 144.9293563899971,
-      "p95_e2e_ms": 239.80260179995412,
+      "avg_lookup_ms": 0.08882575999678011,
+      "avg_e2e_ms": 145.02880604000097,
+      "p95_e2e_ms": 240.22388020000562,
       "llm_calls": 100
     }
   ],
@@ -168,15 +168,19 @@
     "hit_rate": 0.0,
     "overall_hit_rate": 0.0,
     "precision": 1.0,
-    "avg_lookup_ms": 0.06498913000314133,
-    "avg_e2e_ms": 144.93012659999522,
-    "p95_e2e_ms": 239.8030534999691,
+    "avg_lookup_ms": 0.0959848800096097,
+    "avg_e2e_ms": 145.0359651600138,
+    "p95_e2e_ms": 240.23090245003687,
     "llm_calls": 100
   },
   "baseline_llm_calls": 100,
-  "baseline_avg_ms": 144.86513746999208,
-  "baseline_p95_ms": 239.7526380000329,
+  "baseline_avg_ms": 144.9399802800042,
+  "baseline_p95_ms": 240.121105999998,
   "guard_off_false_hits": 0,
   "negation_examples": [],
-  "headline": "Cache hit rate 0.0% on 100 test questions at threshold 0.95 with 0 false hits; LLM calls down 0.0%; average latency down from 145 ms to 145 ms."
+  "headline": "Cache hit rate 0.0% on 100 test questions at threshold 0.95 with 0 false hits; LLM calls down 0.0%; average latency down from 145 ms to 145 ms.",
+  "price_in_per_1m": 0.3,
+  "price_out_per_1m": 2.5,
+  "cost_per_1k_before": 0.041968,
+  "cost_per_1k_after": 0.041968
 }
