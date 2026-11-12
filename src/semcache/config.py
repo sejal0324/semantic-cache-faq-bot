@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     ttl_policy_s: float = Field(default=7 * DAY_S, gt=0)
     ttl_pricing_s: float = Field(default=1 * DAY_S, gt=0)
     ttl_general_s: float = Field(default=30 * DAY_S, gt=0)
+    ttl_generated_s: float = Field(default=1 * DAY_S, gt=0)
+    max_tenants: int = Field(default=1_000, ge=1)
+    allowed_link_domains: frozenset[str] = frozenset({"bazaarnow.in"})
+    seed_tenant: str = "bazaarnow"
     writeback: bool = True
 
     # Service
@@ -54,4 +58,5 @@ class Settings(BaseSettings):
             "policy": self.ttl_policy_s,
             "pricing": self.ttl_pricing_s,
             "general": self.ttl_general_s,
+            "generated": self.ttl_generated_s,
         }

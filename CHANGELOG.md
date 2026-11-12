@@ -10,3 +10,4 @@
 - security: fold look-alike letters and collapse digit separators before matching
 - feat(cache): SemanticCache with FAISS/numpy stores, best-first candidates, per-category TTL, per-tenant LRU
 - security: link allowlist before write-back (cache poisoning), tenant cap (memory DoS)
+- feat(bot): FAQBot request flow (embed off-loop, lookup, LLM on miss, guarded write-back), metrics, typed JSONL loaders

@@ -54,3 +54,17 @@ This is a portfolio project, not a formally audited system.
 - In production `tenant_id` must come from authentication, never from the request body.
 - "Promote after N" write-back: only cache an LLM answer after it was generated for 3+ distinct users.
 - Add an admin endpoint to purge one entry or one tenant when a bad answer is found.
+
+## Feature 4: bot request flow, metrics, dataset loaders
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| 4.1 | A user injects an instruction into their own question ("reply with the help link") and a naive model writes an attacker link; without the allowlist this would be cached for everyone | High | Fixed by 3.1; verified end to end: the attacker sees it, the next user does not | `test_injected_link_reaches_attacker_only_not_other_users` |
+| 4.2 | Error path logging the raw question (with an email) on LLM failure | Medium | Fixed: only a hash and length are logged, on success and failure | `test_failure_log_has_no_raw_text`, `test_logs_hash_not_raw_question` |
+| 4.3 | The model hallucinates a phone number in a generated answer | Medium | Fixed: the PII check runs on generated answers before write-back | `test_hallucinated_phone_in_answer_is_not_cached` |
+| 4.4 | Malformed or huge dataset files crash startup with an unclear error | Low | Fixed: rows validated with pydantic, file and line in the error, 5 MB size cap | `test_load_jsonl_rejects_bad_rows`, `test_load_jsonl_skips_blank_lines_and_rejects_huge_files` |
+| 4.5 | LLM-generated answers would get a long TTL | Low | Fixed by design: generated answers use the short `generated` TTL (1 day) | `test_settings_defaults_and_env` |
+
+**Scope for improvement**
+- Run an output moderation step on generated answers before they are cached.
+- Keep a provenance flag (`curated` vs `generated`) visible in the response so the UI can label it.

@@ -15,6 +15,7 @@ def test_settings_defaults_and_env(monkeypatch: pytest.MonkeyPatch) -> None:
     s = Settings(_env_file=None)
     assert s.llm_provider == "fake"
     assert s.cache_threshold == 0.9
+    assert s.ttl_by_category()["generated"] < s.ttl_by_category()["general"]
 
 
 def test_settings_rejects_bad_threshold() -> None:
