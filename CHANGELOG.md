@@ -13,3 +13,5 @@
 - feat(bot): FAQBot request flow (embed off-loop, lookup, LLM on miss, guarded write-back), metrics, typed JSONL loaders
 - data: 30 hand-written e-commerce FAQs and a 100-question labelled test set (60 paraphrases, 45% Hinglish; 40 negations, near misses, out-of-scope), with integrity tests
 - feat(api): FastAPI service (/ask, /healthz, /metrics) with strict validation and generic errors; factory wiring from settings
+- feat(experiments): threshold sweep x 2 models x guard on/off, auto-pick threshold, before/after latency, README auto-fill; smoke mode isolated in reports/smoke
+- feat(scripts): run_experiments.py, demo.py

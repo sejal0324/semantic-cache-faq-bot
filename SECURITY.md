@@ -86,3 +86,15 @@ This is a portfolio project, not a formally audited system.
 - Derive `tenant_id` from an auth token instead of the body.
 - Per-tenant token-bucket rate limiting (Redis) in front of the LLM path.
 - Protect `/metrics` (internal network or auth).
+
+## Feature 7: experiment pipeline and scripts
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| 7.1 | Integrity risk: a fake-backend run could overwrite the README with numbers that look real | High (honesty) | Fixed: `--smoke` writes only to `reports/smoke/` with a "not a real measurement" banner; real mode refuses `LLM_PROVIDER=fake` | `test_smoke_run_writes_only_to_smoke_dir`, `test_real_mode_refuses_fake_llm` |
+| 7.2 | README block replacement with a regex could eat the rest of the file if a marker is missing | Low | Fixed: non-greedy match, error if markers are missing | `test_replace_block` |
+| 7.3 | `per_question.jsonl` contains the test questions | Low | Accepted: synthetic, hand-written data with no real users | — |
+
+**Scope for improvement**
+- Bootstrap confidence intervals on the hit rate (100 questions is a small sample).
+- A held-out test split so the threshold is not tuned and reported on the same questions.
