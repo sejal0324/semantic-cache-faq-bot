@@ -67,6 +67,8 @@ async def test_real_mode_fills_readme(workdir: Path) -> None:
     assert (workdir / "reports" / "results.json").exists()
     assert (workdir / "reports" / "per_question.jsonl").exists()
     assert {r.model for r in results.rows} == {"model-a", "model-b"}
+    assert results.cost_per_1k_before >= results.cost_per_1k_after > 0  # fake embedder: no hits
+    assert "per 1,000 questions" in readme
 
 
 async def test_real_mode_refuses_fake_llm(workdir: Path) -> None:

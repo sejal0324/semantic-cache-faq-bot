@@ -18,3 +18,5 @@
 - perf: exact-match fast path before embedding, single-flight for concurrent identical misses, load shedding (MAX_INFLIGHT_REQUESTS)
 - test(load): load harness (50 to 5,000 users), baseline vs tuned results in LOAD_TEST.md
 - docs: README (architecture, design decisions, interview notes), LOAD_TEST.md, SECURITY.md
+- feat(cache): purge by FAQ id / generated-only / tenant; admin DELETE /cache/{tenant}
+- feat(experiments): LLM cost per 1,000 questions before vs after the cache, from measured tokens

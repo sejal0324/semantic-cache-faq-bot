@@ -218,6 +218,25 @@ class SemanticCache:
                 self._evict(space, oldest)
         return StoreDecision(True, "stored")
 
+    def purge(
+        self, tenant: str, *, source_id: str | None = None, generated_only: bool = False
+    ) -> int:
+        """Invalidate entries: one FAQ's answers (`source_id`), only LLM-generated answers, or
+        the whole tenant. Use it when a policy changes instead of waiting for the TTL."""
+        with self._lock:
+            space = self._spaces.get(tenant)
+            if space is None:
+                return 0
+            doomed = [
+                key
+                for key, e in space.entries.items()
+                if (source_id is None or e.source_id == source_id)
+                and (not generated_only or e.source_id is None)
+            ]
+            for key in doomed:
+                self._evict(space, key)
+            return len(doomed)
+
     @staticmethod
     def _evict(space: _TenantSpace, key: int) -> None:
         entry = space.entries.pop(key, None)

@@ -42,6 +42,11 @@ flowchart LR
    it contains user data (order ID, phone, email, "my name is…") or a link outside the
    allowlist.
 6. Every request is logged as one JSON line: question hash, hit/miss, similarity, latency, tokens.
+7. **Invalidation:** when a policy changes, `DELETE /cache/{tenant}?source_id=f11` (admin
+   token) purges that FAQ's cached answers immediately instead of waiting for the TTL;
+   `?generated_only=true` purges only LLM-written answers.
+8. **Cost:** the experiment prices the measured tokens per 1,000 questions, before and after
+   the cache (prices configurable in `.env`).
 
 ## Quickstart
 
@@ -143,8 +148,8 @@ LLM stampede. After the exact-match fast path, single-flight and load shedding: 
    rising faster than recall below the chosen threshold; each false hit is a wrong answer
    given to a customer.
 2. *"How do you invalidate when the refund policy changes?"* Category TTLs bound how stale an
-   answer can get; for an immediate change, purge by `source_id` (the FAQ id is stored on every
-   seeded entry) or by tenant.
+   answer can get; for an immediate change, `DELETE /cache/{tenant}?source_id=f11` purges every
+   cached answer derived from that FAQ (the id is stored on each seeded entry).
 3. *"What if two tenants share an FAQ?"* They still get separate indexes; the seed step simply
    loads it into both. Sharing an index would save memory but risk leaks.
 

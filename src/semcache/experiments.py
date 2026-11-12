@@ -99,6 +99,10 @@ class ExperimentResults:
     guard_off_false_hits: int
     negation_examples: list[tuple[str, str]]
     headline: str
+    price_in_per_1m: float = 0.0
+    price_out_per_1m: float = 0.0
+    cost_per_1k_before: float = 0.0
+    cost_per_1k_after: float = 0.0
     per_question: list[QuestionRecord] = field(default_factory=list)
 
 
@@ -195,19 +199,25 @@ def pick_threshold(rows: Sequence[SweepRow], *, max_false_hits: int = 1) -> Swee
     return min(rows, key=lambda r: (r.false_hits, -r.threshold))
 
 
+def cost_usd(tokens_in: int, tokens_out: int, *, price_in: float, price_out: float) -> float:
+    """Cost in USD for a number of input/output tokens at prices per 1M tokens."""
+    return (tokens_in * price_in + tokens_out * price_out) / 1_000_000
+
+
 async def measure_llm(
     llm: LLMClient, tests: Sequence[EvalQuestion], *, concurrency: int = 1
-) -> dict[str, tuple[float, int]]:
-    """Send every test question to the LLM once, without the cache. Returns ms and tokens."""
+) -> dict[str, tuple[float, int, int]]:
+    """Send every test question to the LLM once, without the cache.
+    Returns ms, input tokens and output tokens per question."""
     sem = asyncio.Semaphore(concurrency)
 
-    async def one(t: EvalQuestion) -> tuple[str, tuple[float, int]]:
+    async def one(t: EvalQuestion) -> tuple[str, tuple[float, int, int]]:
         async with sem:
             msgs = [Message("system", SYSTEM_PROMPT), Message("user", t.text)]
             start = time.perf_counter()
             resp = await llm.complete(msgs, temperature=0.0, max_tokens=256)
             ms = (time.perf_counter() - start) * 1000
-            return t.id, (ms, resp.input_tokens + resp.output_tokens)
+            return t.id, (ms, resp.input_tokens, resp.output_tokens)
 
     return dict(await asyncio.gather(*(one(t) for t in tests)))
 
@@ -299,12 +309,16 @@ def render_markdown(res: ExperimentResults) -> str:
     lines += [
         "#### Before vs after",
         "",
-        "| | LLM calls | Avg latency | p95 latency |",
-        "|---|---|---|---|",
+        "| | LLM calls | Avg latency | p95 latency | LLM cost per 1,000 questions* |",
+        "|---|---|---|---|---|",
         f"| No cache | {res.baseline_llm_calls} | {res.baseline_avg_ms:.0f} ms "
-        f"| {res.baseline_p95_ms:.0f} ms |",
+        f"| {res.baseline_p95_ms:.0f} ms | ${res.cost_per_1k_before:.4f} |",
         f"| Semantic cache @ {c.threshold:.2f} | {c.llm_calls} | {c.avg_e2e_ms:.0f} ms "
-        f"| {c.p95_e2e_ms:.0f} ms |",
+        f"| {c.p95_e2e_ms:.0f} ms | ${res.cost_per_1k_after:.4f} |",
+        "",
+        f"\\* Measured token counts priced at an assumed ${res.price_in_per_1m:.2f} / "
+        f"${res.price_out_per_1m:.2f} per 1M input / output tokens (`PRICE_IN_PER_1M`, "
+        "`PRICE_OUT_PER_1M` in `.env`); a local Ollama model costs $0 in API fees.",
         "",
         "Method: cache seeded with the 30 FAQs and read-only during the run; every question "
         "sent once to the LLM to measure its real latency; end-to-end = measured lookup + "
@@ -355,7 +369,7 @@ async def run_experiments(
         concurrency = 1  # sequential, so latency numbers are not inflated by queueing
 
     llm_stats = await measure_llm(client, tests, concurrency=concurrency)
-    llm_ms = {qid: ms for qid, (ms, _) in llm_stats.items()}
+    llm_ms = {qid: ms for qid, (ms, _, _) in llm_stats.items()}
 
     rows: list[SweepRow] = []
     records: dict[tuple[str, bool, float], list[QuestionRecord]] = {}
@@ -381,6 +395,13 @@ async def run_experiments(
         if r.model == chosen.model and not r.guard and r.threshold == chosen.threshold
     )
     baseline = np.array(list(llm_ms.values()))
+    prices = {"price_in": settings.price_in_per_1m, "price_out": settings.price_out_per_1m}
+    per_1k = 1000 / len(tests)
+    cost_before = sum(cost_usd(i, o, **prices) for _, i, o in llm_stats.values()) * per_1k
+    missed = {r.qid for r in chosen_records if not r.hit}
+    cost_after = (
+        sum(cost_usd(i, o, **prices) for q, (_, i, o) in llm_stats.items() if q in missed) * per_1k
+    )
     res = ExperimentResults(
         mode="smoke" if smoke else "real",
         created_at=datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC"),
@@ -408,6 +429,10 @@ async def run_experiments(
             n=len(tests),
         ),
         per_question=chosen_records,
+        price_in_per_1m=settings.price_in_per_1m,
+        price_out_per_1m=settings.price_out_per_1m,
+        cost_per_1k_before=cost_before,
+        cost_per_1k_after=cost_after,
     )
 
     markdown = render_markdown(res)

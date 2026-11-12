@@ -112,3 +112,11 @@ This is a portfolio project, not a formally audited system.
 **Scope for improvement**
 - Shed per tenant (fair queueing), not globally.
 - Return cached answers even when shedding (only shed requests that need the LLM).
+
+## Feature 9: cache invalidation API and cost report
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| 9.1 | A purge endpoint is a destructive admin action: open access = anyone can wipe the cache (cost DoS) | High | Fixed: `X-Admin-Token` checked with `hmac.compare_digest`; endpoint disabled (503) when no token is configured | `test_purge_endpoint_requires_token`, `test_purge_disabled_without_token` |
+| 9.2 | Path / query injection on tenant and FAQ id | Medium | Fixed: strict patterns on both | `test_purge_validates_tenant` |
+| 9.3 | Purge in one tenant affecting another | High | Checked: purge works on one tenant's space only | `test_purge_by_source_id` |

@@ -50,7 +50,12 @@ class Settings(BaseSettings):
     single_flight: bool = True  # concurrent identical misses share one LLM call
     max_inflight_requests: int = Field(default=0, ge=0)  # 0 = no load shedding
 
+    # Cost model (USD per 1M tokens) used only for the cost report. Set your provider's price.
+    price_in_per_1m: float = Field(default=0.30, ge=0.0)
+    price_out_per_1m: float = Field(default=2.50, ge=0.0)
+
     # Service
+    admin_token: SecretStr = SecretStr("")  # enables DELETE /cache/{tenant}; empty = disabled
     max_question_chars: int = Field(default=500, ge=1, le=10_000)
     log_level: str = "INFO"
     data_dir: Path = REPO_ROOT / "data"
