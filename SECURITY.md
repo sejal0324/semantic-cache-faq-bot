@@ -68,3 +68,21 @@ This is a portfolio project, not a formally audited system.
 **Scope for improvement**
 - Run an output moderation step on generated answers before they are cached.
 - Keep a provenance flag (`curated` vs `generated`) visible in the response so the UI can label it.
+
+## Feature 6: HTTP API
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| 6.1 | **Length-limit bypass with NFKC expansion**: `U+FDFA` is 1 char that normalises to 18, so 100 "short" chars become 1,800 | Medium | Fixed: hard cap (2,000) before normalisation, configured cap after it | `test_nfkc_expansion_cannot_bypass_length_limit`, `test_hard_cap_before_normalisation` |
+| 6.2 | Path-like or oversized `tenant_id` (`../../etc`) | Medium | Fixed: `^[A-Za-z0-9_-]{1,64}$` | `test_bad_input_rejected_with_422` |
+| 6.3 | Mass assignment: a client sending `"threshold": 0.0` to force hits | Medium | Fixed: `extra="forbid"` on the request model | `test_bad_input_rejected_with_422` |
+| 6.4 | Invisible-only question (`"​"`) passing `min_length=1` | Low | Fixed: emptiness checked after normalisation | `test_bad_input_rejected_with_422` |
+| 6.5 | Stack traces or upstream addresses in error responses | Medium | Fixed: 503 for LLM errors and 500 for anything else, both generic | `test_llm_outage_returns_503_without_details`, `test_unexpected_error_is_generic_500` |
+| 6.6 | `/metrics` exposing user questions | Low | Checked: counts and latencies only | `test_metrics_do_not_expose_questions` |
+| 6.7 | No authentication or rate limiting on `/ask` | Medium | Accepted for a demo; put it behind an API gateway with auth and per-tenant rate limits | — |
+| 6.8 | No request body size limit at the server | Low | Accepted: set `--limit-concurrency` and a body limit at the reverse proxy (nginx `client_max_body_size`) | — |
+
+**Scope for improvement**
+- Derive `tenant_id` from an auth token instead of the body.
+- Per-tenant token-bucket rate limiting (Redis) in front of the LLM path.
+- Protect `/metrics` (internal network or auth).

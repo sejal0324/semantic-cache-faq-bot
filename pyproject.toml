@@ -41,6 +41,7 @@ where = ["src"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
 addopts = "-q --cov=semcache --cov-report=term-missing:skip-covered --cov-fail-under=85"
 
 [tool.coverage.run]
