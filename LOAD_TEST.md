@@ -104,3 +104,9 @@ generator as much as the server. The server-side limits that remain are real, th
    separately from the API.
 4. Load test from **separate machines** (distributed Locust) to get a true capacity number.
 5. Per-tenant rate limits at the gateway, so one tenant cannot use up the shared capacity.
+
+## Re-check after adding tracing, cost tracking and invalidation
+
+500 users, same setup (`reports/loadtest/recheck-500.json`): **147 RPS, p50 1.15 s, 0 errors**
+vs 158 RPS / 0.97 s before. That's within run-to-run noise on this shared VM: with `TRACING=off`
+the OpenTelemetry API is a no-op, and cost tracking is one multiplication per LLM call.
