@@ -114,3 +114,11 @@ def test_replace_block(tmp_path: Path) -> None:
     assert out == "a\n<!-- RESULTS:START -->\nnew\n<!-- RESULTS:END -->\nb"
     with pytest.raises(ValueError, match="markers"):
         replace_block("no markers", "RESULTS", "x")
+
+
+def test_repo_readme_has_generated_blocks() -> None:
+    from semcache.config import REPO_ROOT
+
+    text = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    for name in ("HEADLINE", "RESULTS"):
+        assert f"<!-- {name}:START -->" in text and f"<!-- {name}:END -->" in text
