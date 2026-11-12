@@ -24,3 +24,10 @@ jobs:
       - run: make smoke
       # eval gate: fail the build if measured numbers regress
       - run: make gate
+
+  container:
+    # Build the lite image (fake backends) and test the running container end to end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh scripts/container_smoke.sh

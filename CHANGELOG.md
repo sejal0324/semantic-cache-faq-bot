@@ -23,3 +23,4 @@
 - feat(observability): OpenTelemetry spans per stage with tokens and USD cost (console / OTLP to Jaeger, Tempo, Langfuse); cost in /metrics
 - feat(demo): single-page demo UI at / with CSP; Dockerfile for HF Spaces / Render / Fly.io
 - feat(ci): eval gate (eval_gate.json, make gate / gate-real); CI fails if measured numbers regress
+- feat(docker): portable Dockerfile (BASE_IMAGE, WITH_MODELS, CA build secret) and container smoke test, run in CI

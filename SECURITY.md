@@ -128,3 +128,10 @@ This is a portfolio project, not a formally audited system.
 | 10.1 | Traces are a second log: raw questions (with phone numbers) in span attributes would leak PII to the tracing backend | High | Fixed: spans carry tenant, hit/miss, similarity, tokens, cost, latency; never text | `test_miss_emits_stage_spans_with_tokens_and_cost` |
 | 10.2 | **Stored XSS through the cache**: a cached LLM answer containing `<script>` rendered by the demo page would run in every visitor's browser | High | Fixed: the page writes all server values with `textContent`; strict CSP (`default-src 'none'`, `connect-src 'self'`, no framing) and `nosniff` | `test_demo_page_is_safe_html` |
 | 10.3 | Container running as root | Medium | Fixed: non-root `app` user; `.env` excluded by `.dockerignore` | — (Dockerfile; not built in the sandbox, which has no Docker) |
+
+## Container
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| C.1 | Build-time credentials (proxy CA, proxy address) persisting in image layers or history | High | Checked: the CA is a BuildKit secret mount used only for `pip install`; `docker history` contains no proxy address and the secret path is absent at runtime | `scripts/container_smoke.sh` |
+| C.2 | Container runs as root / ships `.env` or tests | Medium | Checked in the running container: uid 1000, no `.env`, no tests | `scripts/container_smoke.sh` |

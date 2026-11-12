@@ -1,6 +1,6 @@
 PY ?= python
 
-.PHONY: gate gate-real install install-models test lint format typecheck smoke experiments demo serve loadtest check
+.PHONY: container-smoke gate gate-real install install-models test lint format typecheck smoke experiments demo serve loadtest check
 
 install:
 	$(PY) -m pip install -e ".[dev]"
@@ -47,3 +47,7 @@ gate:
 
 gate-real:
 	$(PY) scripts/eval_gate.py --mode real
+
+# Build the lite Docker image and test the running container (needs Docker)
+container-smoke:
+	sh scripts/container_smoke.sh

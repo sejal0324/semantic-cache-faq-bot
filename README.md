@@ -91,6 +91,18 @@ Not yet run with real models: run `make experiments`. This block, the headline a
 `reports/results.json` are written by `scripts/run_experiments.py`; nothing here is typed by hand.
 <!-- RESULTS:END -->
 
+## Docker
+
+```bash
+docker build -t app .                                   # full image, real embedding model
+docker build --build-arg WITH_MODELS=0 -t app:lite .    # lite image, fake backends (CI, demos)
+make container-smoke                                    # build lite + test the running container
+```
+`make container-smoke` starts the container and checks it over HTTP: health check, demo page and
+CSP, API behaviour, non-root user, and no `.env` or build secrets inside the image. CI runs it on
+every push. Behind a TLS-inspecting proxy, pass the CA as a build secret
+(`--secret id=pipca,src=ca.pem`); it is used for `pip install` only and never stored in the image.
+
 ## Eval gate (CI)
 
 `eval_gate.json` holds thresholds on measured numbers; `make gate` checks them and CI runs it on
