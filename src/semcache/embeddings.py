@@ -45,9 +45,14 @@ class FakeEmbedder:
     run the pipeline offline. Uses blake2b, not `hash()`, so results are stable across runs.
     """
 
-    def __init__(self, dim: int = 256, *, latency_s: float = 0.0) -> None:
+    def __init__(self, dim: int = 256, *, latency_s: float = 0.0, cpu_bound: bool = True) -> None:
         self._dim = dim
         self._latency_s = latency_s
+        self._cpu_bound = cpu_bound
+
+    @property
+    def latency_s(self) -> float:
+        return self._latency_s
 
     @property
     def name(self) -> str:
@@ -66,9 +71,20 @@ class FakeEmbedder:
             feats.extend((f"c:{padded[i : i + 3]}", 1.0) for i in range(len(padded) - 2))
         return feats
 
+    def _simulate_latency(self) -> None:
+        """Real embedding models are CPU-bound. Spinning (holding the GIL) models that much
+        better than sleeping, which would let other threads run for free."""
+        if not self._cpu_bound:
+            time.sleep(self._latency_s)
+            return
+        end = time.perf_counter() + self._latency_s
+        x = 0
+        while time.perf_counter() < end:
+            x += 1
+
     def embed(self, texts: Sequence[str]) -> FloatMatrix:
         if self._latency_s:
-            time.sleep(self._latency_s)
+            self._simulate_latency()
         out = np.zeros((len(texts), self._dim), dtype=np.float32)
         for row, text in enumerate(texts):
             for feat, weight in self._features(text):
@@ -109,5 +125,5 @@ class SentenceTransformerEmbedder:
 
 def build_embedder(settings: Settings, model_name: str | None = None) -> Embedder:
     if settings.embedder == "fake":
-        return FakeEmbedder()
+        return FakeEmbedder(latency_s=settings.fake_embed_latency_s)
     return SentenceTransformerEmbedder(model_name or settings.embedding_model)

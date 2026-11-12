@@ -28,4 +28,10 @@ def build_bot(
 ) -> FAQBot:
     cache = build_cache(settings, embedder or build_embedder(settings))
     seed_faqs(cache, settings.seed_tenant, load_faqs(settings.data_dir / "faqs.jsonl"))
-    return FAQBot(cache, llm or build_llm(settings), writeback=settings.writeback)
+    return FAQBot(
+        cache,
+        llm or build_llm(settings),
+        writeback=settings.writeback,
+        exact_fast_path=settings.exact_fast_path,
+        single_flight=settings.single_flight,
+    )

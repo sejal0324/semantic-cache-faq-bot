@@ -1,0 +1,95 @@
+{
+  "env": {},
+  "rows": [
+    {
+      "users": 50,
+      "requests": 845,
+      "rps": 31.4,
+      "p50_ms": 22.5,
+      "p95_ms": 1033.3,
+      "p99_ms": 1416.6,
+      "error_rate": 0.0,
+      "errors": {},
+      "client_hit_rate": 0.896,
+      "llm_calls": 88,
+      "server_cpu_avg_pct": 50.4,
+      "server_cpu_max_pct": 77.8,
+      "server_rss_max_mb": 101.6,
+      "elapsed_s": 26.9
+    },
+    {
+      "users": 500,
+      "requests": 1893,
+      "rps": 56.8,
+      "p50_ms": 4769.5,
+      "p95_ms": 12664.2,
+      "p99_ms": 15183.4,
+      "error_rate": 0.0016,
+      "errors": {
+        "ReadError": 3
+      },
+      "client_hit_rate": 0.913,
+      "llm_calls": 164,
+      "server_cpu_avg_pct": 73.5,
+      "server_cpu_max_pct": 111.9,
+      "server_rss_max_mb": 112.5,
+      "elapsed_s": 33.3
+    },
+    {
+      "users": 1000,
+      "requests": 2085,
+      "rps": 50.9,
+      "p50_ms": 10408.2,
+      "p95_ms": 28372.0,
+      "p99_ms": 31438.4,
+      "error_rate": 0.0005,
+      "errors": {
+        "ReadError": 1
+      },
+      "client_hit_rate": 0.907,
+      "llm_calls": 193,
+      "server_cpu_avg_pct": 67.4,
+      "server_cpu_max_pct": 109.5,
+      "server_rss_max_mb": 114.3,
+      "elapsed_s": 41.0
+    },
+    {
+      "users": 2000,
+      "requests": 3158,
+      "rps": 54.3,
+      "p50_ms": 21022.0,
+      "p95_ms": 46819.1,
+      "p99_ms": 51360.9,
+      "error_rate": 0.0006,
+      "errors": {
+        "ReadError": 2
+      },
+      "client_hit_rate": 0.935,
+      "llm_calls": 206,
+      "server_cpu_avg_pct": 71.5,
+      "server_cpu_max_pct": 121.9,
+      "server_rss_max_mb": 114.0,
+      "elapsed_s": 58.1
+    },
+    {
+      "users": 5000,
+      "requests": 6125,
+      "rps": 67.1,
+      "p50_ms": 47386.4,
+      "p95_ms": 65062.5,
+      "p99_ms": 66195.0,
+      "error_rate": 0.1827,
+      "errors": {
+        "ConnectTimeout": 1061,
+        "ReadTimeout": 48,
+        "ReadError": 10
+      },
+      "client_hit_rate": 0.954,
+      "llm_calls": 278,
+      "server_cpu_avg_pct": 71.1,
+      "server_cpu_max_pct": 111.2,
+      "server_rss_max_mb": 187.9,
+      "elapsed_s": 74.6
+    }
+  ]
+}

@@ -307,6 +307,10 @@ class FakeLLM:
     def model(self) -> str:
         return self._model
 
+    @property
+    def latency_s(self) -> tuple[float, float]:
+        return self._latency
+
     async def complete(
         self, messages: Sequence[Message], *, temperature: float = 0.0, max_tokens: int = 512
     ) -> LLMResponse:
@@ -346,4 +350,4 @@ def build_llm(settings: Settings) -> LLMClient:
             timeout_s=settings.llm_timeout_s,
             retry=retry,
         )
-    return FakeLLM()
+    return FakeLLM(latency_s=settings.fake_llm_latency_s)

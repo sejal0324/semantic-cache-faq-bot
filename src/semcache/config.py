@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     llm_timeout_s: float = Field(default=120.0, gt=0)
     llm_max_attempts: int = Field(default=4, ge=1, le=10)
 
+    # Fake backends (tests, smoke runs, load tests): simulated latency
+    fake_llm_latency_s: tuple[float, float] = (0.0, 0.0)
+    fake_embed_latency_s: float = Field(default=0.0, ge=0.0)
+
     # Embeddings
     embedder: Literal["st", "fake"] = "st"
     embedding_model: str = "paraphrase-multilingual-MiniLM-L12-v2"
@@ -41,6 +45,10 @@ class Settings(BaseSettings):
     allowed_link_domains: frozenset[str] = frozenset({"bazaarnow.in"})
     seed_tenant: str = "bazaarnow"
     writeback: bool = True
+    # Scaling (see LOAD_TEST.md)
+    exact_fast_path: bool = True  # exact repeats skip the embedding model
+    single_flight: bool = True  # concurrent identical misses share one LLM call
+    max_inflight_requests: int = Field(default=0, ge=0)  # 0 = no load shedding
 
     # Service
     max_question_chars: int = Field(default=500, ge=1, le=10_000)

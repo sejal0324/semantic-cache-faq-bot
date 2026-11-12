@@ -40,6 +40,8 @@ def create_app(bot: FAQBot | None = None, settings: Settings | None = None) -> F
     app = FastAPI(title="semantic-cache-faq-bot", version="0.1.0")
     app.state.bot = bot or build_bot(settings)
     max_chars = settings.max_question_chars
+    max_inflight = settings.max_inflight_requests
+    app.state.inflight = 0
 
     @app.exception_handler(Exception)
     async def _unhandled(_: Request, exc: Exception) -> JSONResponse:
@@ -57,6 +59,17 @@ def create_app(bot: FAQBot | None = None, settings: Settings | None = None) -> F
 
     @app.post("/ask", response_model=AskResponse)
     async def ask(req: AskRequest) -> AskResponse:
+        # Load shedding: answer "busy" in 1 ms instead of queueing for a minute.
+        if max_inflight and app.state.inflight >= max_inflight:
+            app.state.bot.metrics.record_shed()
+            raise HTTPException(503, detail="overloaded, retry", headers={"Retry-After": "1"})
+        app.state.inflight += 1
+        try:
+            return await _answer(req)
+        finally:
+            app.state.inflight -= 1
+
+    async def _answer(req: AskRequest) -> AskResponse:
         # Normalise first, then check length: NFKC can expand one char into many.
         question = normalize(req.question)
         if not question or len(question) > max_chars:

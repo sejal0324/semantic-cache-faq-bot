@@ -10,7 +10,7 @@ from dataclasses import dataclass, replace
 
 from semcache.cache import SemanticCache
 from semcache.data import FAQ
-from semcache.llm import LLMClient, Message
+from semcache.llm import LLMClient, LLMError, Message
 from semcache.logging_utils import log_event, short_hash
 from semcache.metrics import Metrics
 from semcache.pii import PIIDetector
@@ -59,6 +59,8 @@ class FAQBot:
         *,
         metrics: Metrics | None = None,
         writeback: bool = True,
+        exact_fast_path: bool = True,
+        single_flight: bool = True,
         max_tokens: int = 256,
     ) -> None:
         self.cache = cache
@@ -67,14 +69,23 @@ class FAQBot:
         self._writeback = writeback
         self._max_tokens = max_tokens
         self._pii = PIIDetector()
+        self._exact = exact_fast_path
+        self._single_flight = single_flight
+        self._inflight: dict[tuple[str, str], asyncio.Future[str]] = {}
 
     async def ask(self, tenant: str, question: str) -> AskResult:
         start = time.perf_counter()
         q = normalize(question)
         try:
-            # Embedding is CPU-bound: keep it off the event loop.
-            vector = await asyncio.to_thread(self.cache.embed, q)
-            lookup = self.cache.lookup(tenant, q, vector=vector)
+            exact = self.cache.lookup_exact(tenant, q) if self._exact else None
+            if exact is not None and exact.entry is not None:
+                # Fast path: an exact repeat needs no embedding at all.
+                lookup = exact
+                vector = None
+            else:
+                # Embedding is CPU-bound: keep it off the event loop.
+                vector = await asyncio.to_thread(self.cache.embed, q)
+                lookup = self.cache.lookup(tenant, q, vector=vector)
             if lookup.hit and lookup.entry is not None:
                 result = AskResult(
                     answer=lookup.entry.answer,
@@ -86,14 +97,20 @@ class FAQBot:
                     source_id=lookup.entry.source_id,
                 )
             else:
-                result = await self._generate(tenant, q, vector, lookup.similarity, lookup.reason)
+                assert vector is not None  # noqa: S101 - a miss always went through embedding
+                result = await self._generate_once(
+                    tenant, q, vector, lookup.similarity, lookup.reason
+                )
                 result = replace(result, latency_ms=(time.perf_counter() - start) * 1000)
         except Exception:
             self.metrics.record_error()
             log_event(logger, "ask_failed", tenant=tenant, q_hash=short_hash(q))
             raise
         self.metrics.record(
-            cached=result.cached, latency_ms=result.latency_ms, tokens=result.tokens
+            cached=result.cached,
+            latency_ms=result.latency_ms,
+            tokens=result.tokens,
+            coalesced=result.reason == "coalesced",
         )
         log_event(
             logger,
@@ -110,6 +127,32 @@ class FAQBot:
             stored=result.stored_reason,
         )
         return result
+
+    async def _generate_once(
+        self, tenant: str, q: str, vector: Vector, similarity: float, reason: str
+    ) -> AskResult:
+        """Single-flight: concurrent identical misses wait for one LLM call (no stampede)."""
+        if not self._single_flight:
+            return await self._generate(tenant, q, vector, similarity, reason)
+        key = (tenant, q.lower())
+        existing = self._inflight.get(key)
+        if existing is not None:
+            answer = await asyncio.shield(existing)
+            return AskResult(answer, False, similarity, "coalesced", 0.0, 0)
+        flight: asyncio.Future[str] = asyncio.get_running_loop().create_future()
+        flight.add_done_callback(_mark_retrieved)
+        self._inflight[key] = flight
+        try:
+            result = await self._generate(tenant, q, vector, similarity, reason)
+            flight.set_result(result.answer)
+            return result
+        except Exception as exc:
+            flight.set_exception(exc)
+            raise
+        finally:
+            if not flight.done():  # cancelled leader: release the waiters with an error
+                flight.set_exception(LLMError("request cancelled"))
+            self._inflight.pop(key, None)
 
     async def _generate(
         self, tenant: str, q: str, vector: Vector, similarity: float, reason: str
@@ -135,3 +178,9 @@ class FAQBot:
             tokens=resp.input_tokens + resp.output_tokens,
             stored_reason=stored_reason,
         )
+
+
+def _mark_retrieved(fut: asyncio.Future[str]) -> None:
+    """Avoid 'exception was never retrieved' warnings when a failed flight had no waiters."""
+    if not fut.cancelled():
+        fut.exception()

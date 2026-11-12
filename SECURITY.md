@@ -98,3 +98,17 @@ This is a portfolio project, not a formally audited system.
 **Scope for improvement**
 - Bootstrap confidence intervals on the hit rate (100 questions is a small sample).
 - A held-out test split so the threshold is not tuned and reported on the same questions.
+
+## Feature 8: scaling fixes (fast path, single-flight, load shedding)
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| 8.1 | Cache stampede: N concurrent misses for one question make N paid LLM calls (cost amplification an attacker can trigger) | Medium | Fixed: single-flight per (tenant, question) | `test_concurrent_identical_misses_call_llm_once` |
+| 8.2 | A failed or cancelled LLM call could leave a "stuck" in-flight entry that blocks the question forever | Medium | Fixed: the entry is always removed in `finally`; waiters get the error | `test_single_flight_error_reaches_all_waiters_and_clears` |
+| 8.3 | Single-flight shared across tenants would leak one tenant's answer to another | High | Fixed by design: the key includes the tenant | `test_single_flight_is_per_tenant` |
+| 8.4 | Unbounded queueing turns overload into a 60 s hang for everyone (easy DoS) | Medium | Fixed: `MAX_INFLIGHT_REQUESTS` sheds with `503 Retry-After` | `test_api_sheds_load_beyond_max_inflight` |
+| 8.5 | The exact-match fast path bypasses the negation guard | Low | Checked: only identical normalised text matches, so negation cannot differ | `test_lookup_exact_is_case_and_space_insensitive` |
+
+**Scope for improvement**
+- Shed per tenant (fair queueing), not globally.
+- Return cached answers even when shedding (only shed requests that need the LLM).

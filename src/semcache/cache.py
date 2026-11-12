@@ -51,7 +51,7 @@ class LookupResult:
     hit: bool
     entry: CacheEntry | None
     similarity: float
-    reason: str  # hit | empty | below_threshold | expired | negation_mismatch
+    reason: str  # hit | exact | empty | below_threshold | expired | negation_mismatch
 
 
 @dataclass(frozen=True, slots=True)
@@ -131,6 +131,21 @@ class SemanticCache:
     def embed(self, question: str) -> Vector:
         vector: Vector = self._embedder.embed([normalize(question)])[0]
         return vector
+
+    def lookup_exact(self, tenant: str, question: str) -> LookupResult | None:
+        """O(1) exact-text match (case/space-insensitive). No embedding needed."""
+        dedup_key = normalize(question).lower()
+        with self._lock:
+            space = self._spaces.get(tenant)
+            key = space.by_question.get(dedup_key) if space else None
+            if space is None or key is None:
+                return None
+            entry = space.entries[key]
+            if entry.expires_at <= self._clock():
+                self._evict(space, key)
+                return None
+            space.entries.move_to_end(key)
+            return LookupResult(True, entry, 1.0, "exact")
 
     def lookup(self, tenant: str, question: str, *, vector: Vector | None = None) -> LookupResult:
         q = normalize(question)

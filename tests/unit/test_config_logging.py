@@ -66,3 +66,11 @@ def test_short_hash_stable_and_short() -> None:
     assert short_hash("abc") == short_hash("abc")
     assert len(short_hash("abc")) == 16
     assert short_hash("abc") != short_hash("abd")
+
+
+def test_fake_llm_latency_from_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("FAKE_LLM_LATENCY_S", "[0.3, 1.5]")
+    s = Settings(_env_file=None, llm_provider="fake")
+    llm = build_llm(s)
+    assert isinstance(llm, FakeLLM)
+    assert llm.latency_s == (0.3, 1.5)

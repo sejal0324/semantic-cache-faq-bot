@@ -1,0 +1,44 @@
+{
+  "env": {
+    "MAX_INFLIGHT_REQUESTS": "256"
+  },
+  "rows": [
+    {
+      "users": 1000,
+      "requests": 4243,
+      "rps": 142.6,
+      "p50_ms": 2863.1,
+      "p95_ms": 11094.3,
+      "p99_ms": 16357.5,
+      "error_rate": 0.0,
+      "errors": {},
+      "client_hit_rate": 0.942,
+      "llm_calls": 126,
+      "server_cpu_avg_pct": 58.8,
+      "server_cpu_max_pct": 95.5,
+      "server_rss_max_mb": 107.7,
+      "client_cpu_avg_pct": 80.4,
+      "elapsed_s": 29.8
+    },
+    {
+      "users": 2000,
+      "requests": 3663,
+      "rps": 93.5,
+      "p50_ms": 12132.1,
+      "p95_ms": 29122.1,
+      "p99_ms": 33023.7,
+      "error_rate": 0.0128,
+      "errors": {
+        "503": 42,
+        "ReadError": 5
+      },
+      "client_hit_rate": 0.931,
+      "llm_calls": 116,
+      "server_cpu_avg_pct": 43.0,
+      "server_cpu_max_pct": 97.9,
+      "server_rss_max_mb": 113.0,
+      "client_cpu_avg_pct": 83.4,
+      "elapsed_s": 38.7
+    }
+  ]
+}

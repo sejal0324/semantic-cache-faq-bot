@@ -84,3 +84,18 @@ def test_sentence_transformer_missing_dependency_message(monkeypatch: pytest.Mon
 
 def test_build_embedder_fake() -> None:
     assert isinstance(build_embedder(Settings(_env_file=None, embedder="fake")), FakeEmbedder)
+
+
+def test_fake_embedder_cpu_bound_latency_spins() -> None:
+    import time
+
+    e = FakeEmbedder(latency_s=0.02, cpu_bound=True)
+    start = time.process_time()
+    e.embed(["x"])
+    assert time.process_time() - start >= 0.015, "CPU-bound mode must burn CPU, not sleep"
+
+
+def test_build_embedder_fake_uses_latency_settings() -> None:
+    s = Settings(_env_file=None, embedder="fake", fake_embed_latency_s=0.01)
+    e = build_embedder(s)
+    assert isinstance(e, FakeEmbedder) and e.latency_s == 0.01

@@ -15,3 +15,5 @@
 - feat(api): FastAPI service (/ask, /healthz, /metrics) with strict validation and generic errors; factory wiring from settings
 - feat(experiments): threshold sweep x 2 models x guard on/off, auto-pick threshold, before/after latency, README auto-fill; smoke mode isolated in reports/smoke
 - feat(scripts): run_experiments.py, demo.py
+- perf: exact-match fast path before embedding, single-flight for concurrent identical misses, load shedding (MAX_INFLIGHT_REQUESTS)
+- test(load): load harness (50 to 5,000 users), baseline vs tuned results in LOAD_TEST.md
