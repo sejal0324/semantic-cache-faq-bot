@@ -7,7 +7,7 @@ import logging
 from typing import Annotated
 
 from fastapi import FastAPI, Header, HTTPException, Path, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from semcache.bot import FAQBot
@@ -16,6 +16,8 @@ from semcache.factory import build_bot
 from semcache.llm import LLMError
 from semcache.logging_utils import configure_logging
 from semcache.text import normalize
+from semcache.tracing import setup_tracing
+from semcache.ui import PAGE, SECURITY_HEADERS
 
 HARD_MAX_CHARS = 2_000  # checked before normalisation, bounds the work per request
 logger = logging.getLogger("semcache.api")
@@ -39,6 +41,7 @@ class AskResponse(BaseModel):
 def create_app(bot: FAQBot | None = None, settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings()
     configure_logging(settings.log_level)
+    setup_tracing(settings.tracing)
     app = FastAPI(title="semantic-cache-faq-bot", version="0.1.0")
     app.state.bot = bot or build_bot(settings)
     max_chars = settings.max_question_chars
@@ -69,6 +72,10 @@ def create_app(bot: FAQBot | None = None, settings: Settings | None = None) -> F
             tenant_id, source_id=source_id, generated_only=generated_only
         )
         return {"removed": removed}
+
+    @app.get("/", response_class=HTMLResponse, include_in_schema=False)
+    async def demo_page() -> HTMLResponse:
+        return HTMLResponse(PAGE, headers=SECURITY_HEADERS)
 
     @app.get("/healthz")
     async def healthz() -> dict[str, str]:

@@ -18,11 +18,19 @@ class Metrics:
         self.tokens = 0
         self.coalesced = 0
         self.shed = 0
+        self.cost_usd = 0.0
 
     def record(
-        self, *, cached: bool, latency_ms: float, tokens: int, coalesced: bool = False
+        self,
+        *,
+        cached: bool,
+        latency_ms: float,
+        tokens: int,
+        coalesced: bool = False,
+        cost_usd: float = 0.0,
     ) -> None:
         with self._lock:
+            self.cost_usd += cost_usd
             self.requests += 1
             self.coalesced += int(coalesced)
             self.hits += int(cached)
@@ -48,6 +56,7 @@ class Metrics:
                 "llm_calls": misses - self.coalesced,
                 "coalesced": self.coalesced,
                 "shed": self.shed,
+                "cost_usd": round(self.cost_usd, 6),
                 "errors": self.errors,
                 "tokens": self.tokens,
                 "hit_rate": round(self.hits / self.requests, 4) if self.requests else 0.0,

@@ -20,3 +20,5 @@
 - docs: README (architecture, design decisions, interview notes), LOAD_TEST.md, SECURITY.md
 - feat(cache): purge by FAQ id / generated-only / tenant; admin DELETE /cache/{tenant}
 - feat(experiments): LLM cost per 1,000 questions before vs after the cache, from measured tokens
+- feat(observability): OpenTelemetry spans per stage with tokens and USD cost (console / OTLP to Jaeger, Tempo, Langfuse); cost in /metrics
+- feat(demo): single-page demo UI at / with CSP; Dockerfile for HF Spaces / Render / Fly.io

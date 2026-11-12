@@ -58,6 +58,7 @@ class Settings(BaseSettings):
     admin_token: SecretStr = SecretStr("")  # enables DELETE /cache/{tenant}; empty = disabled
     max_question_chars: int = Field(default=500, ge=1, le=10_000)
     log_level: str = "INFO"
+    tracing: Literal["off", "console", "otlp"] = "off"
     data_dir: Path = REPO_ROOT / "data"
 
     @model_validator(mode="after")

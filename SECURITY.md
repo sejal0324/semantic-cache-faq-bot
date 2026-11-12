@@ -120,3 +120,11 @@ This is a portfolio project, not a formally audited system.
 | 9.1 | A purge endpoint is a destructive admin action: open access = anyone can wipe the cache (cost DoS) | High | Fixed: `X-Admin-Token` checked with `hmac.compare_digest`; endpoint disabled (503) when no token is configured | `test_purge_endpoint_requires_token`, `test_purge_disabled_without_token` |
 | 9.2 | Path / query injection on tenant and FAQ id | Medium | Fixed: strict patterns on both | `test_purge_validates_tenant` |
 | 9.3 | Purge in one tenant affecting another | High | Checked: purge works on one tenant's space only | `test_purge_by_source_id` |
+
+## Feature 10: tracing, demo page, container
+
+| # | Finding | Severity | Status | Test |
+|---|---|---|---|---|
+| 10.1 | Traces are a second log: raw questions (with phone numbers) in span attributes would leak PII to the tracing backend | High | Fixed: spans carry tenant, hit/miss, similarity, tokens, cost, latency; never text | `test_miss_emits_stage_spans_with_tokens_and_cost` |
+| 10.2 | **Stored XSS through the cache**: a cached LLM answer containing `<script>` rendered by the demo page would run in every visitor's browser | High | Fixed: the page writes all server values with `textContent`; strict CSP (`default-src 'none'`, `connect-src 'self'`, no framing) and `nosniff` | `test_demo_page_is_safe_html` |
+| 10.3 | Container running as root | Medium | Fixed: non-root `app` user; `.env` excluded by `.dockerignore` | — (Dockerfile; not built in the sandbox, which has no Docker) |

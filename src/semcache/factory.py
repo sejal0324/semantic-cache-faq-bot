@@ -34,4 +34,6 @@ def build_bot(
         writeback=settings.writeback,
         exact_fast_path=settings.exact_fast_path,
         single_flight=settings.single_flight,
+        price_in_per_1m=settings.price_in_per_1m,
+        price_out_per_1m=settings.price_out_per_1m,
     )

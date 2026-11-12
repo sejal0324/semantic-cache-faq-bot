@@ -71,6 +71,16 @@ make serve                   # http://localhost:8000/docs
 make loadtest                # optional, ~5 min
 ```
 
+**Live demo page:** `make serve` and open http://localhost:8000. **Deploy:** the `Dockerfile`
+runs on Hugging Face Spaces (Docker SDK, set `PORT=7860`), Render or Fly.io; use
+`LLM_PROVIDER=gemini` with the key as a platform secret.
+
+**Tracing:** set `TRACING=console` to print spans, or `TRACING=otlp` plus the standard
+`OTEL_EXPORTER_OTLP_ENDPOINT` / `OTEL_EXPORTER_OTLP_HEADERS` to send them to Jaeger, Grafana
+Tempo or Langfuse (`pip install -e ".[otel]"`). Each request is a `faq.ask` span with child
+spans `cache.exact_lookup`, `embed`, `cache.lookup` and `llm.generate`, carrying tokens, USD
+cost and latency, never the raw question. `/metrics` also reports total cost.
+
 `make smoke` runs the whole pipeline with fake backends (no network); its output goes only to
 `reports/smoke/` and is labelled as not a real measurement.
 

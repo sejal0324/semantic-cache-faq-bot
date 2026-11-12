@@ -16,6 +16,7 @@ from semcache.metrics import Metrics
 from semcache.pii import PIIDetector
 from semcache.store import Vector
 from semcache.text import normalize
+from semcache.tracing import tracer
 
 logger = logging.getLogger("semcache.bot")
 
@@ -38,6 +39,7 @@ class AskResult:
     tokens: int
     stored_reason: str | None = None
     source_id: str | None = None
+    cost_usd: float = 0.0
 
 
 def seed_faqs(cache: SemanticCache, tenant: str, faqs: Iterable[FAQ]) -> int:
@@ -62,6 +64,8 @@ class FAQBot:
         exact_fast_path: bool = True,
         single_flight: bool = True,
         max_tokens: int = 256,
+        price_in_per_1m: float = 0.0,
+        price_out_per_1m: float = 0.0,
     ) -> None:
         self.cache = cache
         self._llm = llm
@@ -72,20 +76,41 @@ class FAQBot:
         self._exact = exact_fast_path
         self._single_flight = single_flight
         self._inflight: dict[tuple[str, str], asyncio.Future[str]] = {}
+        self._price_in = price_in_per_1m
+        self._price_out = price_out_per_1m
 
     async def ask(self, tenant: str, question: str) -> AskResult:
+        with tracer().start_as_current_span("faq.ask") as span:
+            span.set_attribute("tenant", tenant)
+            result = await self._ask(tenant, question)
+            span.set_attribute("cached", result.cached)
+            span.set_attribute("reason", result.reason)
+            span.set_attribute("similarity", round(result.similarity, 4))
+            span.set_attribute("tokens", result.tokens)
+            span.set_attribute("cost_usd", result.cost_usd)
+            span.set_attribute("latency_ms", round(result.latency_ms, 2))
+            return result
+
+    async def _ask(self, tenant: str, question: str) -> AskResult:
         start = time.perf_counter()
         q = normalize(question)
+        trace_span = tracer()
         try:
-            exact = self.cache.lookup_exact(tenant, q) if self._exact else None
+            exact = None
+            if self._exact:
+                with trace_span.start_as_current_span("cache.exact_lookup"):
+                    exact = self.cache.lookup_exact(tenant, q)
             if exact is not None and exact.entry is not None:
                 # Fast path: an exact repeat needs no embedding at all.
                 lookup = exact
                 vector = None
             else:
-                # Embedding is CPU-bound: keep it off the event loop.
-                vector = await asyncio.to_thread(self.cache.embed, q)
-                lookup = self.cache.lookup(tenant, q, vector=vector)
+                with trace_span.start_as_current_span("embed"):
+                    # Embedding is CPU-bound: keep it off the event loop.
+                    vector = await asyncio.to_thread(self.cache.embed, q)
+                with trace_span.start_as_current_span("cache.lookup") as s:
+                    lookup = self.cache.lookup(tenant, q, vector=vector)
+                    s.set_attribute("best_similarity", round(lookup.similarity, 4))
             if lookup.hit and lookup.entry is not None:
                 result = AskResult(
                     answer=lookup.entry.answer,
@@ -111,6 +136,7 @@ class FAQBot:
             latency_ms=result.latency_ms,
             tokens=result.tokens,
             coalesced=result.reason == "coalesced",
+            cost_usd=result.cost_usd,
         )
         log_event(
             logger,
@@ -158,7 +184,13 @@ class FAQBot:
         self, tenant: str, q: str, vector: Vector, similarity: float, reason: str
     ) -> AskResult:
         messages = [Message("system", SYSTEM_PROMPT), Message("user", q)]
-        resp = await self._llm.complete(messages, temperature=0.0, max_tokens=self._max_tokens)
+        with tracer().start_as_current_span("llm.generate") as span:
+            resp = await self._llm.complete(messages, temperature=0.0, max_tokens=self._max_tokens)
+            cost = (resp.input_tokens * self._price_in + resp.output_tokens * self._price_out) / 1e6
+            span.set_attribute("model", resp.model)
+            span.set_attribute("tokens_in", resp.input_tokens)
+            span.set_attribute("tokens_out", resp.output_tokens)
+            span.set_attribute("cost_usd", cost)
         stored_reason: str | None = None
         if self._writeback:
             decision = self.cache.put(
@@ -177,6 +209,7 @@ class FAQBot:
             latency_ms=0.0,
             tokens=resp.input_tokens + resp.output_tokens,
             stored_reason=stored_reason,
+            cost_usd=cost,
         )
 
 
